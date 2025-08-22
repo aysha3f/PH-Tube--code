@@ -18,3 +18,5 @@ const DisPlayCategories = (data) => {
 };
 
 loadCatagories();
+
+
