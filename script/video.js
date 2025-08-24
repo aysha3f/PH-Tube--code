@@ -8,12 +8,27 @@ const loadCatagories = () =>{
     .then((res) => res.json())
     .then((data)=> DisPlayCategories(data.categories))
     .catch((error) => console.log(error));
+};
 
-}
+// {
+//     "category_id": "1001",
+//     "category": "Music"
+// }
 // Create DisPlayCategories
-const DisPlayCategories = (data) => {
-    // add Data in html
-    console.log(data);
+const DisPlayCategories = (categories) => {
+ const categoryContainer = document.getElementById("categories");
+ 
+    categories.forEach( (item) => {
+  console.log(item);
+  // create a button
+
+  const button = document.createElement("button");
+  button.classList = "btn";
+  button.innerText = item.category;
+
+  // add button to catagory container
+  categoryContainer.append(button);
+ });
 
 };
 
