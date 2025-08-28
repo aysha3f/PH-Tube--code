@@ -10,7 +10,7 @@ function getTimeString(time) {
 const removeActiveClass = () => {
   const buttons = document.getElementsByClassName("category-btn");
   console.log(buttons);
-  for(let btn of buttons){
+  for (let btn of buttons) {
     btn.classList.remove("active");
   }
 };
@@ -24,9 +24,9 @@ const loadCatagories = () => {
     .then((data) => disPlayCategories(data.categories))
     .catch((error) => console.log(error));
 };
-const loadVideos = () => {
+const loadVideos = (searchText ="") => {
   // fetch the data
-  fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
     .then((res) => res.json())
     .then((data) => disPlayVideos(data.videos))
     .catch((error) => console.log(error));
@@ -39,34 +39,34 @@ const loadCategoryVideos = (id) => {
     .then((data) => {
       // sobaike active class remove koro
       removeActiveClass();
-       
+
       //id er class k active koro
       const activeBtn = document.getElementById(`btn-${id}`);
       activeBtn.classList.add("active");
       disPlayVideos(data.category);
     })
     .catch((error) => console.log(error));
-};
+}; 
 
-const loadDetails= async (videoId)=> {
-const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
-const res = await fetch(uri);
-const data = await res.json();
-disPlayDetails(data.video);
+const loadDetails = async (videoId) => {
+  const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+  const res = await fetch(uri);
+  const data = await res.json();
+  disPlayDetails(data.video);
 };
-const disPlayDetails = (video)=>{
+const disPlayDetails = (video) => {
   console.log(video);
-  const detailContainer= document.getElementById("modal-content");
+  const detailContainer = document.getElementById("modal-content");
 
-  detailContainer.innerHTML =`
+  detailContainer.innerHTML = `
   <img src =${video.thumbnail}/>
   <p>${video.description}</p>
-  `
+  `;
   // way-1
- // document.getElementById("showModalData").click();
+  // document.getElementById("showModalData").click();
   // way-2
- document.getElementById("customModal").showModal();
-}
+  document.getElementById("customModal").showModal();
+};
 
 // const cardDemo ={
 //     category_id: "1001",
@@ -107,7 +107,7 @@ const disPlayVideos = (videos) => {
   }
 
   videos.forEach((video) => {
-   // console.log(video);
+    // console.log(video);
     const card = document.createElement("div");
     card.classList = "card card-compact";
     card.innerHTML = `
@@ -145,7 +145,9 @@ const disPlayVideos = (videos) => {
 
   
  </div>
- <p> <button onclick="loadDetails('${video.video_id}')" class="btn btn-sm btn-error">details</button> </p>
+ <p> <button onclick="loadDetails('${
+   video.video_id
+ }')" class="btn btn-sm btn-error">details</button> </p>
  </div>
   </div>
         
@@ -176,5 +178,11 @@ ${item.category}
   });
 };
 
+
+
+document.getElementById("search-input").addEventListener("keyup", (e) =>{
+
+  loadVideos(e.target.value);
+});
 loadCatagories();
 loadVideos();
